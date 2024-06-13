@@ -7,8 +7,7 @@ import (
 )
 
 func main() {
-	// 设置Gin的运行模式为DebugMode
-	gin.SetMode(gin.DebugMode)
+	gin.SetMode(gin.DebugMode) // 设置Gin的运行模式为DebugMode
 
 	r := gin.Default()
 	r.LoadHTMLGlob("templates/*")
