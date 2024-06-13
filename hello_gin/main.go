@@ -48,5 +48,35 @@ func main() {
 		}
 	})
 
+	r.GET("/hello", func(c *gin.Context) {
+		// c.JSON
+		c.JSON(200, gin.H{"massage": "Wahts good!"})
+	})
+
+	r.GET("/user/search", func(c *gin.Context) {
+		username := c.DefaultQuery("username", "小王子")
+		//username := c.Quer y("username")
+		address := c.Query("address")
+		//输出json结果给调用方
+		c.JSON(http.StatusOK, gin.H{
+			"message":  "ok",
+			"username": username,
+			"address":  address,
+		})
+	})
+
+	r.POST("/user/search", func(c *gin.Context) {
+		// DefaultPostForm取不到值时会返回指定的默认值
+		//username := c.DefaultPostForm("username", "小王子")
+		username := c.PostForm("username")
+		address := c.PostForm("address")
+		//输出json结果给调用方
+		c.JSON(http.StatusOK, gin.H{
+			"message":  "ok",
+			"username": username,
+			"address":  address,
+		})
+	})
+
 	r.Run(":8080")
 }
