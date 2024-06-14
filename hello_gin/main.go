@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -77,6 +78,8 @@ func main() {
 			"address":  address,
 		})
 	})
+
+	fmt.Println(http.StatusIMUsed) // 输出 226
 
 	r.Run(":8080")
 }
