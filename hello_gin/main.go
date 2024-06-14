@@ -3,9 +3,15 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
+
+type AdditionRequest struct {
+	Number1 float64 `json:"number1" binding:"required":`
+	Number2 float64 `json:"number2" binding:"required"`
+}
 
 func main() {
 	gin.SetMode(gin.DebugMode) // 设置Gin的运行模式为DebugMode
@@ -48,13 +54,15 @@ func main() {
 			})
 		}
 	})
-
-	r.GET("/hello", func(c *gin.Context) {
-		// c.JSON
-		c.JSON(200, gin.H{"massage": "Wahts good!"})
+	//路径参数绑定
+	r.GET("user/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		c.JSON(http.StatusOK, gin.H{
+			"user_id": id,
+		})
 	})
-
-	r.GET("/user/search", func(c *gin.Context) {
+	//查询参数绑定
+	r.GET("search", func(c *gin.Context) {
 		username := c.DefaultQuery("username", "小王子")
 		//username := c.Quer y("username")
 		address := c.Query("address")
@@ -66,20 +74,36 @@ func main() {
 		})
 	})
 
-	r.POST("/user/search", func(c *gin.Context) {
-		// DefaultPostForm取不到值时会返回指定的默认值
-		//username := c.DefaultPostForm("username", "小王子")
-		username := c.PostForm("username")
-		address := c.PostForm("address")
-		//输出json结果给调用方
-		c.JSON(http.StatusOK, gin.H{
-			"message":  "ok",
-			"username": username,
-			"address":  address,
-		})
-	})
+	//form 参数绑定
+	r.POST("/subtract", func(c *gin.Context) {
+		number1 := c.PostForm("number1")
+		number2 := c.PostForm("number2")
 
-	fmt.Println(http.StatusIMUsed) // 输出 226
+		if number1 == "" || number2 == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "number1 and number2 are required"})
+			return
+		}
+		num1, err1 := strconv.ParseFloat(number1, 64)
+		num2, err2 := strconv.ParseFloat(number2, 64)
+		if err1 != nil || err2 != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid number format"})
+			return
+		}
+		result := num1 - num2
+		c.JSON(http.StatusOK, gin.H{"result": result})
+	})
+	//JSON 参数示例
+	r.POST("/add", func(c *gin.Context) {
+		var request AdditionRequest
+		if err := c.ShouldBindJSON(&request); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		result := request.Number1 + request.Number2
+		c.JSON(http.StatusOK, gin.H{"result", result})
+	})
+	fmt.Println("-----------------------------", http.StatusIMUsed) // 输出 226
 
 	r.Run(":8080")
 }
