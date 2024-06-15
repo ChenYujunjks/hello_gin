@@ -118,5 +118,9 @@ func main() {
 			"message": fmt.Sprintf("'%s' uploaded!", file.Filename),
 		})
 	})
+	//重定向
+	r.GET("/old-page", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/add")
+	})
 	r.Run(":8080")
 }
