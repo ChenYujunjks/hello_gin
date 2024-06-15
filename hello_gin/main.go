@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	routes "hello_gin/routers"
 	"log"
 	"net/http"
 	"strconv"
-
-	"github.com/gin-gonic/gin"
 )
 
 type AdditionRequest struct {
@@ -19,6 +18,7 @@ func main() {
 	gin.SetMode(gin.DebugMode) // 设置Gin的运行模式为DebugMode
 
 	r := gin.Default()
+	r.Use(StatCost())
 	r.LoadHTMLGlob("templates/*")
 
 	routes.RegisterRoutes(r)
@@ -113,7 +113,10 @@ func main() {
 		log.Println(file.Filename)
 		dst := fmt.Sprintf("C:/tmp/%s", file.Filename)
 		// 上传文件到指定的目录
-		c.SaveUploadedFile(file, dst)
+		err2 := c.SaveUploadedFile(file, dst)
+		if err2 != nil {
+			return
+		}
 		c.JSON(http.StatusOK, gin.H{
 			"message": fmt.Sprintf("'%s' uploaded!", file.Filename),
 		})
@@ -122,5 +125,9 @@ func main() {
 	r.GET("/old-page", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/add")
 	})
-	r.Run(":8080")
+
+	err := r.Run(":8080")
+	if err != nil {
+		return
+	}
 }
