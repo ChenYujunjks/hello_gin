@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .title }}</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="title-container">
+            <h1>{{ .title }}</h1>
+            <img src="/assets/img/fry.jpg" alt="Fry Image" class="title-image">
+        </div>
+        <section id="about">
+            <h2>About Yujun Chen</h2>
+            <p>Welcome to Yujun Chen's personal website. Here you will find information about my work, projects, and interests.</p>
+        </section>
+        <section id="projects">
+            <h2>Projects</h2>
+            <p>Details about my projects will be available here.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Yujun Chen. All rights reserved.</p>
+    </footer>
+</body>
+</html>
