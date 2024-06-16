@@ -77,6 +77,7 @@ func main() {
 	})
 	//JSON 参数示例
 	r.POST("/add", func(c *gin.Context) {
+		log.Println(c) //研究gin.Context 对象
 		number1 := c.PostForm("number1")
 		number2 := c.PostForm("number2")
 
@@ -92,6 +93,7 @@ func main() {
 		}
 		result := num1 + num2
 		c.JSON(http.StatusOK, gin.H{"result": result})
+		log.Println(c)
 	})
 	// 处理GET请求，渲染HTML页面
 	r.GET("/upload", func(c *gin.Context) {
