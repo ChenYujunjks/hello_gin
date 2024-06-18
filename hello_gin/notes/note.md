@@ -1,3 +1,4 @@
+```go
 package main
 
 import "fmt"
@@ -22,3 +23,5 @@ func main() {
 	fmt.Println(s1.name)
 	fmt.Println(s1.Person.name)
 }
+
+```

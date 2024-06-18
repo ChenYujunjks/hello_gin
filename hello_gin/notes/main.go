@@ -1,7 +1,6 @@
 package main
 
 import (
-	routes "hello_gin/routers"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -30,7 +29,6 @@ func main() {
 	r := gin.Default()
 	r.LoadHTMLGlob("../templates/*")
 
-	routes.RegisterRoutes(r)
 	r.GET("/student", studentHandler)
 	r.GET("/school", schoolHandler)
 
