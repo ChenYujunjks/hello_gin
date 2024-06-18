@@ -14,6 +14,10 @@ type AdditionRequest struct {
 	Number1 float64 `json:"number1" binding:"required"`
 	Number2 float64 `json:"number2" binding:"required"`
 }
+type Item struct {
+	Name  string `json:"name"`
+	Value int    `json:"value"`
+}
 
 func main() {
 	gin.SetMode(gin.DebugMode) // 设置Gin的运行模式为DebugMode
@@ -128,7 +132,30 @@ func main() {
 	r.GET("/old-page", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/add")
 	})
-
+	r.GET("/slice-any", func(c *gin.Context) {
+		data := []any{"string", 123, true, map[string]any{"key": "value"}}
+		c.JSON(http.StatusOK, data)
+	})
+	r.GET("/slice-struct", func(c *gin.Context) {
+		data := []Item{
+			{"item1", 1},
+			{"item2", 2},
+		}
+		c.JSON(http.StatusOK, data)
+	})
+	r.GET("/number", func(c *gin.Context) {
+		c.JSON(http.StatusOK, 12345)
+	})
+	r.GET("/string", func(c *gin.Context) {
+		c.JSON(http.StatusOK, "Hello, World!")
+	})
+	r.GET("/map", func(c *gin.Context) {
+		data := map[string]string{
+			"key1": "value1",
+			"key2": "value2",
+		}
+		c.JSON(http.StatusOK, data)
+	})
 	err := r.Run(":8080")
 	if err != nil {
 		return
