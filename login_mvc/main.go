@@ -30,7 +30,7 @@ func main() {
 
 	// 设置路由
 	r.POST("/login", authController.Login)
-
+	r.POST("/register", authController.Register)
 	// 启动服务器
 	r.Run(":8080")
 }

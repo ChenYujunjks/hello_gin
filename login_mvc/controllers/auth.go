@@ -32,6 +32,24 @@ func (ctrl *AuthController) Login(c *gin.Context) {
 		return
 	}
 
-	// 返回成功响应
 	c.JSON(http.StatusOK, gin.H{"message": "欢迎, " + user.Username})
+}
+
+func (ctrl *AuthController) Register(c *gin.Context) {
+	var requestUser models.User
+
+	// 解析请求体中的JSON数据
+	if err := c.ShouldBindJSON(&requestUser); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// 保存用户信息到数据库
+	if err := ctrl.DB.Create(&requestUser).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "注册失败"})
+		return
+	}
+
+	// 返回成功响应
+	c.JSON(http.StatusOK, gin.H{"message": "注册成功"})
 }
