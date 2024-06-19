@@ -22,8 +22,9 @@ func main() {
 	// 迁移数据库
 	db.AutoMigrate(&models.User{})
 
-	// 创建Gin引擎
 	r := gin.Default()
+	// 加载HTML模板
+	r.LoadHTMLGlob("views/*")
 
 	// 将数据库实例传递给控制器
 	authController := c.NewAuthController(db)
@@ -31,6 +32,10 @@ func main() {
 	// 设置路由
 	r.POST("/login", authController.Login)
 	r.POST("/register", authController.Register)
+	r.GET("/users", authController.GetUsers)
+	r.GET("/login", authController.ShowLoginPage)
+	r.GET("/register", authController.ShowRegisterPage)
+
 	// 启动服务器
 	r.Run(":8080")
 }

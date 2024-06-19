@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User List</title>
+</head>
+<body>
+    <h1>User List</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+        </tr>
+        {{ range .users }}
+        <tr>
+            <td>{{ .ID }}</td>
+            <td>{{ .Username }}</td>
+        </tr>
+        {{ end }}
+    </table>
+</body>
+</html>
