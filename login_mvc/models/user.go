@@ -7,4 +7,5 @@ type User struct {
 	gorm.Model
 	Username string `gorm:"unique"`
 	Password string
+	//nigeli   string `form:"username" json:"password" binding:"required"`
 }

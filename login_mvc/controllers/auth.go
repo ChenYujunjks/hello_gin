@@ -24,7 +24,11 @@ func (ctrl *AuthController) Login(c *gin.Context) {
 	// 解析请求体中的JSON数据
 	if err := c.ShouldBindJSON(&requestUser); err != nil {
 		log.Println((err))
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+			"code":  1,
+			"msg":   "请求参数错误",
+		})
 		return
 	}
 
