@@ -76,3 +76,13 @@ func (ctrl *AuthController) ShowLoginPage(c *gin.Context) {
 func (ctrl *AuthController) ShowRegisterPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "register.html", nil)
 }
+
+func (ctrl *AuthController) ShowIndexPage(c *gin.Context) {
+	// 通过HTML函数返回html代码
+	// 第二个参数是模版文件名字
+	// 第三个参数是map类型，代表模版参数
+	// gin.H 是map[string]interface{}类型的别名
+	c.HTML(http.StatusOK, "index.html", gin.H{
+		"title": "Yujun Chen's Personal Website",
+	})
+}

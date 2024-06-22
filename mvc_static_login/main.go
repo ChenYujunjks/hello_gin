@@ -23,9 +23,10 @@ func main() {
 	db.AutoMigrate(&models.User{})
 
 	r := gin.Default()
-	// 加载HTML模板
-	r.LoadHTMLGlob("views/*")
-
+	//首先加载templates目录下面的所有模版文件，模版文件扩展名随意
+	r.LoadHTMLGlob("views/pages/*")
+	//  /assets/images/1.jpg 这个url文件，存储在/public/images/1.jpg
+	r.Static("/assets", "views/static")
 	// 将数据库实例传递给控制器
 	authController := c.NewAuthController(db)
 
@@ -35,7 +36,7 @@ func main() {
 	r.GET("/users", authController.GetUsers)
 	r.GET("/login", authController.ShowLoginPage)
 	r.GET("/register", authController.ShowRegisterPage)
-
+	r.GET("/", authController.ShowIndexPage)
 	// 启动服务器
 	r.Run(":8080")
 }
