@@ -9,21 +9,70 @@ import (
 )
 
 func main() {
-	// 数据库连接字符串
-	dsn := "root:1532@tcp(127.0.0.1:3306)/mydatabase" //"username:password@tcp(127.0.0.1:3306)/mydatabase"
+	// 数据库连接字符串：用户名:密码@tcp(主机:端口)/数据库名
+	dsn := "root:1532@tcp(127.0.0.1:3306)/testdb" //"username:password@tcp(127.0.0.1:3306)/testdb"
 
-	// 创建数据库连接
+	// 打开数据库连接
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	// 检查连接是否成功
-	err = db.Ping()
+	// 测试数据库连接
+	if err := db.Ping(); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Successfully connected to the database")
+
+	// 创建表
+	createTableSQL := `
+        CREATE TABLE IF NOT EXISTS users (
+            id INT AUTO_INCREMENT,
+            name VARCHAR(50) NOT NULL,
+            age INT,
+            PRIMARY KEY (id)
+        );`
+	if _, err := db.Exec(createTableSQL); err != nil {
+		log.Fatal(err)
+	}
+
+	// 插入数据
+	insertSQL := `INSERT INTO users (name, age) VALUES (?, ?)`
+	res, err := db.Exec(insertSQL, "Alice", 25)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("连接成功！")
+	lastInsertID, err := res.LastInsertId()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Inserted new user with ID %d\n", lastInsertID)
+
+	// 读取数据
+	var (
+		id   int
+		name string
+		age  int
+	)
+	querySQL := `SELECT id, name, age FROM users WHERE id = ?`
+	if err := db.QueryRow(querySQL, lastInsertID).Scan(&id, &name, &age); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("User details: ID=%d, Name=%s, Age=%d\n", id, name, age)
+
+	// 更新数据
+	updateSQL := `UPDATE users SET age = ? WHERE id = ?`
+	if _, err := db.Exec(updateSQL, 26, id); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Updated user with ID %d\n", id)
+
+	// 删除数据
+	deleteSQL := `DELETE FROM users WHERE id = ?`
+	if _, err := db.Exec(deleteSQL, id); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Deleted user with ID %d\n", id)
 }
